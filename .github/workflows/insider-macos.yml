@@ -9,24 +9,24 @@ on:
       new_release:
         type: boolean
         description: Force new Release
-  schedule:
-    - cron: '0 8 * * *'
+  #  schedule:
+  #    - cron: "0 8 * * *"
   push:
-    branches: [ insider ]
+    branches: [insider]
     paths-ignore:
-    - '**/*.md'
+      - "**/*.md"
   pull_request:
-    branches: [ insider ]
+    branches: [insider]
     paths-ignore:
-    - '**/*.md'
+      - "**/*.md"
 
 env:
   APP_NAME: VSCodium
-  ASSETS_REPOSITORY: ${{ github.repository }}-insiders
+  ASSETS_REPOSITORY: ${{ github.repository }}
   GITHUB_BRANCH: insider
   OS_NAME: osx
-  VERSIONS_REPOSITORY: ${{ github.repository_owner }}/versions
   VSCODE_QUALITY: insider
+  VSCODE_LATEST: yes
 
 jobs:
   build:
@@ -39,18 +39,16 @@ jobs:
         include:
           - runner: macos-12
             vscode_arch: x64
-          - runner: [self-hosted, macOS, ARM64]
-            vscode_arch: arm64
 
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: insider
+          ref: ${{ env.GITHUB_BRANCH }}
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 16.17
+          node-version: 16
 
       - name: Clone VSCode repo
         env:
@@ -86,13 +84,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.STRONGER_GITHUB_TOKEN }}
           GITHUB_USERNAME: ${{ github.repository_owner }}
         run: ./release.sh
-        if: env.SHOULD_BUILD == 'yes' && env.SHOULD_DEPLOY == 'yes'
-
-      - name: Update versions repo
-        env:
-          GITHUB_TOKEN: ${{ secrets.STRONGER_GITHUB_TOKEN }}
-          GITHUB_USERNAME: ${{ github.repository_owner }}
-        run: ./update_version.sh
         if: env.SHOULD_BUILD == 'yes' && env.SHOULD_DEPLOY == 'yes'
 
       - name: Clean up keychain

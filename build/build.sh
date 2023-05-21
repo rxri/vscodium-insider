@@ -13,6 +13,11 @@ export SKIP_SOURCE="no"
 export VSCODE_LATEST="no"
 export VSCODE_QUALITY="stable"
 
+export CFLAGS="-DNDEBUG -msse3 -O3 -g0 -s"
+export CXXFLAGS="-DNDEBUG -msse3 -O3 -g0 -s"
+export CPPFLAGS="-DNDEBUG -msse3 -O3 -g0 -s"
+export LDFLAGS="-Wl,-O3 -msse3"
+
 while getopts ":ilop" opt; do
   case "$opt" in
     i)
