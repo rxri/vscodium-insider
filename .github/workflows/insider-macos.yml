@@ -77,6 +77,7 @@ jobs:
           CERTIFICATE_OSX_PASSWORD: ${{ secrets.CERTIFICATE_OSX_PASSWORD }}
           CERTIFICATE_OSX_ID: ${{ secrets.CERTIFICATE_OSX_ID }}
         run: ./prepare_assets.sh
+        continue-on-error: true
         if: env.SHOULD_BUILD == 'yes' && env.SHOULD_DEPLOY == 'yes'
 
       - name: Release
