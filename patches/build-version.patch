@@ -160,8 +160,12 @@ index dd166f1..f0a52c4 100644
  		const osProps = await this.nativeHostService.getOSProperties();
 +		const releaseString = getReleaseString();
  
-@@ -90,3 +92,3 @@ export class NativeDialogHandler extends AbstractDialogHandler {
- 				process.sandboxed ? 'Yes' : 'No' // TODO@bpasero remove me once sandbox is final
--			);
-+			).replace('\n', `\n${releaseString} ${this.productService.release || 'Unknown'}\n`);
- 		};
+@@ -87,7 +87,7 @@ export class NativeDialogHandler extends AbstractDialogHandler {
+                                process.versions['node'],
+                                process.versions['v8'],
+                                `${osProps.type} ${osProps.arch} ${osProps.release}${isLinuxSnap ? ' snap' : ''}`
+-                       );
++                       ).replace('\n', `\n${releaseString} ${this.productService.release || 'Unknown'}\n`);
+                };
+
+                const detail = detailString(true);
