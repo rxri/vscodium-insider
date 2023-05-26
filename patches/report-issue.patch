@@ -1,11 +1,11 @@
-diff --git a/src/vs/code/electron-sandbox/issue/IssueReporterService.ts b/src/vs/code/electron-sandbox/issue/IssueReporterService.ts
+diff --git a/src/vs/code/electron-sandbox/issue/issueReporterService.ts b/src/vs/code/electron-sandbox/issue/issueReporterService.ts
 index d0c4789..ce0f861 100644
---- a/src/vs/code/electron-sandbox/issue/IssueReporterService.ts
-+++ b/src/vs/code/electron-sandbox/issue/IssueReporterService.ts
+--- a/src/vs/code/electron-sandbox/issue/issueReporterService.ts
++++ b/src/vs/code/electron-sandbox/issue/issueReporterService.ts
 @@ -453,9 +453,9 @@ export class IssueReporter extends Disposable {
  		return selectedExtension && selectedExtension.bugsUrl;
  	}
- 
+
 -	private searchVSCodeIssues(title: string, issueDescription?: string): void {
 +	private searchVSCodeIssues(title: string, _issueDescription?: string): void {
  		if (title) {
@@ -17,7 +17,7 @@ index d0c4789..ce0f861 100644
 @@ -547,37 +547,6 @@ export class IssueReporter extends Disposable {
  		});
  	}
- 
+
 -	@debounce(300)
 -	private searchDuplicates(title: string, body?: string): void {
 -		const url = 'https://vscode-probot.westus.cloudapp.azure.com:7890/duplicate_candidates';
@@ -68,5 +68,5 @@ index 0eedb21..c83e092 100644
 -	'Before you report an issue here please <a href="https://github.com/microsoft/vscode/wiki/Submitting-Bugs-and-Suggestions" target="_blank">review the guidance we provide</a>.'
 +	'Before you report an issue here please <a href="https://github.com/VSCodium/vscodium/wiki/Submitting-Bugs-and-Suggestions" target="_blank">review the guidance we provide</a>.'
  );
- 
+
  export default (): string => `

@@ -436,10 +436,10 @@ index a9b48a1..64ee475 100644
  					} else {
  						prompt = vscode.window.showWarningMessage(
  							vscode.l10n.t("The JS/TS language service crashed."),
-diff --git a/src/vs/code/electron-sandbox/issue/IssueReporterService.ts b/src/vs/code/electron-sandbox/issue/IssueReporterService.ts
+diff --git a/src/vs/code/electron-sandbox/issue/issueReporterService.ts b/src/vs/code/electron-sandbox/issue/issueReporterService.ts
 index d0c4789..58d173f 100644
---- a/src/vs/code/electron-sandbox/issue/IssueReporterService.ts
-+++ b/src/vs/code/electron-sandbox/issue/IssueReporterService.ts
+--- a/src/vs/code/electron-sandbox/issue/issueReporterService.ts
++++ b/src/vs/code/electron-sandbox/issue/issueReporterService.ts
 @@ -665,7 +665,7 @@ export class IssueReporter extends Disposable {
 
  		sourceSelect.innerText = '';
