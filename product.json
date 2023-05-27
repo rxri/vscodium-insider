@@ -47,16 +47,14 @@
     "^https:\\/\\/github\\.com\\/[^/]+\\/[^/]+\\/(actions\\/)?workflows\\/.*badge\\.svg"
   ],
   "extensionEnabledApiProposals": {
-    "ms-vscode.vscode-selfhost-test-provider": [
-      "testObserver",
-      "testContinuousRun"
-    ],
+    "ms-vscode.vscode-selfhost-test-provider": ["testObserver"],
     "VisualStudioExptTeam.vscodeintellicode-completions": [
       "inlineCompletionsAdditions"
     ],
     "ms-vsliveshare.vsliveshare": [
       "contribMenuBarHome",
       "contribShareMenu",
+      "contribStatusBarItems",
       "diffCommand",
       "documentFiltersExclusive",
       "fileSearchProvider",
@@ -73,9 +71,7 @@
       "workspaceTrust",
       "tunnels"
     ],
-    "ms-toolsai.vscode-ai-remote": [
-      "resolvers"
-    ],
+    "ms-toolsai.vscode-ai-remote": ["resolvers"],
     "ms-python.python": [
       "contribEditorContentMenu",
       "quickPickSortByLabel",
@@ -84,11 +80,10 @@
       "quickPickItemTooltip",
       "terminalDataWriteEvent",
       "envCollectionWorkspace",
-      "saveEditor"
+      "saveEditor",
+      "envCollectionOptions"
     ],
-    "ms-dotnettools.dotnet-interactive-vscode": [
-      "notebookMessaging"
-    ],
+    "ms-dotnettools.dotnet-interactive-vscode": ["notebookMessaging"],
     "GitHub.codespaces": [
       "contribEditSessions",
       "contribMenuBarHome",
@@ -106,6 +101,7 @@
       "textSearchProvider"
     ],
     "ms-vscode.remote-repositories": [
+      "canonicalUriProvider",
       "contribEditSessions",
       "contribRemoteHelp",
       "contribMenuBarHome",
@@ -118,6 +114,7 @@
       "fileSearchProvider",
       "quickPickSortByLabel",
       "workspaceTrust",
+      "shareProvider",
       "scmActionButton",
       "scmSelectedProvider",
       "scmValidation",
@@ -138,9 +135,7 @@
       "contribViewsRemote",
       "telemetry"
     ],
-    "ms-vscode.remote-server": [
-      "resolvers"
-    ],
+    "ms-vscode.remote-server": ["resolvers", "tunnels"],
     "ms-vscode.remote-explorer": [
       "contribRemoteHelp",
       "contribViewsRemote",
@@ -161,9 +156,7 @@
       "workspaceTrust",
       "tunnels"
     ],
-    "ms-vscode.lsif-browser": [
-      "documentFiltersExclusive"
-    ],
+    "ms-vscode.lsif-browser": ["documentFiltersExclusive"],
     "GitHub.vscode-pull-request-github": [
       "contribCommentThreadAdditionalMenu",
       "tokenInformation",
@@ -174,13 +167,29 @@
       "codiconDecoration",
       "diffCommand",
       "contribCommentEditorActionsMenu",
+      "shareProvider",
       "quickDiffProvider"
     ],
     "GitHub.copilot": [
-      "inlineCompletionsAdditions"
+      "inlineCompletionsAdditions",
+      "interactive",
+      "interactiveUserActions",
+      "semanticSimilarity",
+      "terminalDataWriteEvent"
     ],
     "GitHub.copilot-nightly": [
-      "inlineCompletionsAdditions"
+      "inlineCompletionsAdditions",
+      "interactive",
+      "interactiveUserActions",
+      "semanticSimilarity",
+      "terminalDataWriteEvent"
+    ],
+    "GitHub.copilot-chat": [
+      "handleIssueUri",
+      "interactive",
+      "interactiveUserActions",
+      "semanticSimilarity",
+      "terminalDataWriteEvent"
     ],
     "GitHub.remotehub": [
       "contribRemoteHelp",
@@ -197,15 +206,9 @@
       "textSearchProvider",
       "timeline"
     ],
-    "ms-python.gather": [
-      "notebookCellExecutionState"
-    ],
-    "ms-python.vscode-pylance": [
-      "notebookCellExecutionState"
-    ],
-    "ms-toolsai.jupyter-renderers": [
-      "contribNotebookStaticPreloads"
-    ],
+    "ms-python.gather": ["notebookCellExecutionState"],
+    "ms-python.vscode-pylance": ["notebookCellExecutionState"],
+    "ms-toolsai.jupyter-renderers": ["contribNotebookStaticPreloads"],
     "ms-toolsai.jupyter": [
       "notebookDeprecated",
       "notebookMessaging",
@@ -220,27 +223,15 @@
       "quickPickItemTooltip",
       "notebookExecution"
     ],
-    "dbaeumer.vscode-eslint": [
-      "notebookCellExecutionState"
-    ],
-    "ms-vscode.azure-sphere-tools-ui": [
-      "tunnels"
-    ],
-    "ms-azuretools.vscode-azureappservice": [
-      "terminalDataWriteEvent"
-    ],
-    "ms-vscode.anycode": [
-      "extensionsAny"
-    ],
-    "ms-vscode.cpptools": [
-      "terminalDataWriteEvent"
-    ],
-    "redhat.java": [
-      "documentPaste"
-    ],
-    "ms-dotnettools.csdevkit": [
-      "inlineCompletionsAdditions"
-    ],
+    "dbaeumer.vscode-eslint": ["notebookCellExecutionState"],
+    "ms-vscode.azure-sphere-tools-ui": ["tunnels"],
+    "ms-azuretools.vscode-azureappservice": ["terminalDataWriteEvent"],
+    "ms-vscode.anycode": ["extensionsAny"],
+    "ms-vscode.cpptools": ["terminalDataWriteEvent"],
+    "redhat.java": ["documentPaste"],
+    "ms-dotnettools.csdevkit": ["inlineCompletionsAdditions"],
+    "ms-dotnettools.vscodeintellicode-csharp": ["inlineCompletionsAdditions"],
+    "digitarald.chat-plugins": ["interactiveSlashCommands"],
     "jeanp413.open-remote-ssh": [
       "resolvers",
       "tunnels",
@@ -250,54 +241,23 @@
     ]
   },
   "extensionKind": {
-    "Shan.code-settings-sync": [
-      "ui"
-    ],
-    "shalldie.background": [
-      "ui"
-    ],
-    "techer.open-in-browser": [
-      "ui"
-    ],
-    "CoenraadS.bracket-pair-colorizer-2": [
-      "ui"
-    ],
-    "CoenraadS.bracket-pair-colorizer": [
-      "ui",
-      "workspace"
-    ],
-    "hiro-sun.vscode-emacs": [
-      "ui",
-      "workspace"
-    ],
-    "hnw.vscode-auto-open-markdown-preview": [
-      "ui",
-      "workspace"
-    ],
-    "wayou.vscode-todo-highlight": [
-      "ui",
-      "workspace"
-    ],
-    "aaron-bond.better-comments": [
-      "ui",
-      "workspace"
-    ],
-    "vscodevim.vim": [
-      "ui"
-    ],
-    "ollyhayes.colmak-vim": [
-      "ui"
-    ]
+    "Shan.code-settings-sync": ["ui"],
+    "shalldie.background": ["ui"],
+    "techer.open-in-browser": ["ui"],
+    "CoenraadS.bracket-pair-colorizer-2": ["ui"],
+    "CoenraadS.bracket-pair-colorizer": ["ui", "workspace"],
+    "hiro-sun.vscode-emacs": ["ui", "workspace"],
+    "hnw.vscode-auto-open-markdown-preview": ["ui", "workspace"],
+    "wayou.vscode-todo-highlight": ["ui", "workspace"],
+    "aaron-bond.better-comments": ["ui", "workspace"],
+    "vscodevim.vim": ["ui"],
+    "ollyhayes.colmak-vim": ["ui"]
   },
   "extensionPointExtensionKind": {
-    "typescriptServerPlugins": [
-      "workspace"
-    ]
+    "typescriptServerPlugins": ["workspace"]
   },
   "extensionSyncedKeys": {
-    "ritwickdey.liveserver": [
-      "liveServer.setup.version"
-    ]
+    "ritwickdey.liveserver": ["liveServer.setup.version"]
   },
   "extensionVirtualWorkspacesSupport": {
     "esbenp.prettier-vscode": {
