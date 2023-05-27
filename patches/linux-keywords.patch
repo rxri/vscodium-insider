@@ -1,0 +1,13 @@
+diff --git a/resources/linux/code.desktop b/resources/linux/code.desktop
+index 72488b67700..64cc0775b54 100755
+--- a/resources/linux/code.desktop
++++ b/resources/linux/code.desktop
+@@ -10,7 +10,7 @@ StartupWMClass=@@NAME_SHORT@@
+ Categories=TextEditor;Development;IDE;
+ MimeType=text/plain;inode/directory;application/x-@@NAME@@-workspace;
+ Actions=new-empty-window;
+-Keywords=vscode;
++Keywords=vscode;code;codium;vscodium
+
+ [Desktop Action new-empty-window]
+ Name=New Empty Window
