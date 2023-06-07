@@ -220,6 +220,9 @@ if [[ "${OS_NAME}" == "linux" ]]; then
 
   # snapcraft.yaml
   sed -i 's|Visual Studio Code|VSCodium|'  resources/linux/rpm/code.spec.template
+
+  # code.desktop
+  sed -i 's|Keywords=vscode|Keywords=vscode;code;vscodium;codium|' resources/linux/code.desktop
 elif [[ "${OS_NAME}" == "windows" ]]; then
   # code.iss
   sed -i 's|https://code.visualstudio.com|https://vscodium.com|' build/win32/code.iss

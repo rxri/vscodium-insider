@@ -1,31 +1,32 @@
-name: stable-linux
+name: insider-linux
 
 on:
   workflow_dispatch:
     inputs:
+      release_version:
+        type: string
+        description: Forced release version
       new_release:
         type: boolean
         description: Force new Release
-      force_version:
-        type: boolean
-        description: Force update version
-  schedule:
-    - cron: '0 18 * * *'
+  #  schedule:
+  #    - cron: "0 8 * * *"
   push:
-    branches: [ master ]
+    branches: [insider]
     paths-ignore:
-    - '**/*.md'
+      - "**/*.md"
   pull_request:
-    branches: [ master ]
+    branches: [insider]
     paths-ignore:
-    - '**/*.md'
+      - "**/*.md"
 
 env:
   APP_NAME: VSCodium
   ASSETS_REPOSITORY: ${{ github.repository }}
+  GITHUB_BRANCH: insider
   OS_NAME: linux
-  VERSIONS_REPOSITORY: ${{ github.repository_owner }}/versions
-  VSCODE_QUALITY: stable
+  VSCODE_QUALITY: insider
+  VSCODE_LATEST: yes
 
 jobs:
   check:
@@ -45,6 +46,8 @@ jobs:
           ref: ${{ env.GITHUB_BRANCH }}
 
       - name: Clone VSCode repo
+        env:
+          RELEASE_VERSION: ${{ github.event.inputs.release_version }}
         run: ./get_repo.sh
 
       - name: Check PR or cron
@@ -62,8 +65,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - vscode_arch: x64
-          image: vscodium/vscodium-linux-build-agent:centos7-devtoolset8-x64
+          - vscode_arch: x64
+            image: vscodium/vscodium-linux-build-agent:centos7-devtoolset8-x64
         # - vscode_arch: arm64
         #   image: vscodium/vscodium-linux-build-agent:bionic-x64
     container:
@@ -84,7 +87,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: '16.20'
+          node-version: 16
 
       - name: Install Yarn
         run: npm install -g yarn
@@ -123,15 +126,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - vscode_arch: x64
-          npm_arch: x64
-          image: vscodium/vscodium-linux-build-agent:bionic-x64
-        - vscode_arch: arm64
-          npm_arch: arm64
-          image: vscodium/vscodium-linux-build-agent:buster-arm64
-        - vscode_arch: armhf
-          npm_arch: arm
-          image: vscodium/vscodium-linux-build-agent:buster-armhf
+          - vscode_arch: x64
+            npm_arch: x64
+            image: vscodium/vscodium-linux-build-agent:bionic-x64
+          - vscode_arch: arm64
+            npm_arch: arm64
+            image: vscodium/vscodium-linux-build-agent:buster-arm64
+          - vscode_arch: armhf
+            npm_arch: arm
+            image: vscodium/vscodium-linux-build-agent:buster-armhf
     container:
       image: ${{ matrix.image }}
       env:
@@ -144,6 +147,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ env.GITHUB_BRANCH }}
 
       - name: Clone VSCode repo
         run: ./get_repo.sh
@@ -154,7 +159,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: '16.20'
+          node-version: 16
 
       - name: Install Yarn
         run: npm install -g yarn
@@ -188,94 +193,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./release.sh
         if: env.SHOULD_BUILD == 'yes' && env.SHOULD_DEPLOY == 'yes'
-
-      - name: Update versions repo
-        env:
-          FORCE_UPDATE: ${{ github.event.inputs.force_version }}
-          GITHUB_TOKEN: ${{ secrets.STRONGER_GITHUB_TOKEN }}
-          GITHUB_USERNAME: ${{ github.repository_owner }}
-        run: ./update_version.sh
-        if: env.SHOULD_DEPLOY == 'yes'
-
-  aur:
-    needs:
-      - build
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-        - package_name: vscodium
-          package_type: stable
-        - package_name: vscodium-git
-          package_type: rolling
-    if: needs.build.outputs.SHOULD_DEPLOY == 'yes'
-
-    steps:
-      - name: Publish ${{ matrix.package_name }}
-        uses: zokugun/github-actions-aur-releaser@v1
-        with:
-          package_name: ${{ matrix.package_name }}
-          package_type: ${{ matrix.package_type }}
-          aur_private_key: ${{ secrets.AUR_PRIVATE_KEY }}
-          aur_username: ${{ secrets.AUR_USERNAME }}
-          aur_email: ${{ secrets.AUR_EMAIL }}
-
-  snap:
-    needs:
-      - build
-    runs-on: ubuntu-latest
-    env:
-      APP_NAME: codium
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-        - amd64
-        - arm64
-    if: needs.build.outputs.SHOULD_DEPLOY == 'yes'
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Check version
-        env:
-          ARCHITECTURE: ${{ matrix.platform }}
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
-        run: ./stores/snapcraft/check_version.sh
-
-      - uses: docker/setup-qemu-action@v2
-        if: env.SHOULD_DEPLOY == 'yes'
-
-      - uses: diddlesnaps/snapcraft-multiarch-action@v1
-        with:
-          path: stores/snapcraft/stable
-          architecture: ${{ matrix.platform }}
-        id: build
-        if: env.SHOULD_DEPLOY == 'yes'
-
-      - uses: diddlesnaps/snapcraft-review-action@v1
-        with:
-          snap: ${{ steps.build.outputs.snap }}
-          isClassic: 'true'
-        if: env.SHOULD_DEPLOY == 'yes'
-
-      - uses: snapcore/action-publish@master
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
-        with:
-          snap: ${{ steps.build.outputs.snap }}
-          release: stable
-        if: env.SHOULD_DEPLOY == 'yes'
-
-  deb-rpm-repo-hook:
-    needs:
-      - build
-    runs-on: ubuntu-latest
-    if: needs.build.outputs.SHOULD_DEPLOY == 'yes'
-
-    steps:
-      - name: Trigger repository rebuild
-        env:
-          GL_PAGES_TOKEN: ${{ secrets.GL_PAGES_TOKEN }}
-        run: curl -X POST --fail -F token="${GL_PAGES_TOKEN}" -F ref=master https://gitlab.com/api/v4/projects/8762263/trigger/pipeline
