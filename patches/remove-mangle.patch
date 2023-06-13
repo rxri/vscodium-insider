@@ -1,30 +1,30 @@
 diff --git a/build/lib/compilation.js b/build/lib/compilation.js
-index 63ddeb2..31d2f35 100644
+index 2270e05..3b7bc89 100644
 --- a/build/lib/compilation.js
 +++ b/build/lib/compilation.js
 @@ -21,3 +21,2 @@ const File = require("vinyl");
  const task = require("./task");
--const mangleTypeScript_1 = require("./mangleTypeScript");
+-const index_1 = require("./mangle/index");
  const watch = require('./watch');
 @@ -104,24 +103,3 @@ function compileTask(src, out, build, options = {}) {
          }
 -        // mangle: TypeScript to TypeScript
 -        let mangleStream = es.through();
 -        if (build && !options.disableMangle) {
--            let ts2tsMangler = new mangleTypeScript_1.Mangler(compile.projectPath, (...data) => fancyLog(ansiColors.blue('[mangler]'), ...data));
+-            let ts2tsMangler = new index_1.Mangler(compile.projectPath, (...data) => fancyLog(ansiColors.blue('[mangler]'), ...data), { mangleExports: true, manglePrivateFields: true });
 -            const newContentsByFileName = ts2tsMangler.computeNewFileContents(new Set(['saveState']));
--            mangleStream = es.through(function write(data) {
+-            mangleStream = es.through(async function write(data) {
 -                const tsNormalPath = ts.normalizePath(data.path);
--                const newContents = newContentsByFileName.get(tsNormalPath);
+-                const newContents = (await newContentsByFileName).get(tsNormalPath);
 -                if (newContents !== undefined) {
 -                    data.contents = Buffer.from(newContents.out);
 -                    data.sourceMap = newContents.sourceMap && JSON.parse(newContents.sourceMap);
 -                }
 -                this.push(data);
--            }, function end() {
--                this.push(null);
+-            }, async function end() {
 -                // free resources
--                newContentsByFileName.clear();
+-                (await newContentsByFileName).clear();
+-                this.push(null);
 -                ts2tsMangler = undefined;
 -            });
 -        }
@@ -32,34 +32,35 @@ index 63ddeb2..31d2f35 100644
 -            .pipe(mangleStream)
              .pipe(generator.stream)
 diff --git a/build/lib/compilation.ts b/build/lib/compilation.ts
-index d5cd196..afe16d3 100644
+index d5da3f1cd89..afe16d32f48 100644
 --- a/build/lib/compilation.ts
 +++ b/build/lib/compilation.ts
 @@ -19,4 +19,2 @@ import * as File from 'vinyl';
  import * as task from './task';
--import { Mangler } from './mangleTypeScript';
+-import { Mangler } from './mangle/index';
 -import { RawSourceMap } from 'source-map';
  const watch = require('./watch');
-@@ -123,26 +121,3 @@ export function compileTask(src: string, out: string, build: boolean, options: {
+@@ -123,27 +121,3 @@ export function compileTask(src: string, out: string, build: boolean, options: {
  
 -		// mangle: TypeScript to TypeScript
 -		let mangleStream = es.through();
 -		if (build && !options.disableMangle) {
--			let ts2tsMangler = new Mangler(compile.projectPath, (...data) => fancyLog(ansiColors.blue('[mangler]'), ...data));
+-			let ts2tsMangler = new Mangler(compile.projectPath, (...data) => fancyLog(ansiColors.blue('[mangler]'), ...data), { mangleExports: true, manglePrivateFields: true });
 -			const newContentsByFileName = ts2tsMangler.computeNewFileContents(new Set(['saveState']));
--			mangleStream = es.through(function write(data: File & { sourceMap?: RawSourceMap }) {
+-			mangleStream = es.through(async function write(data: File & { sourceMap?: RawSourceMap }) {
 -				type TypeScriptExt = typeof ts & { normalizePath(path: string): string };
 -				const tsNormalPath = (<TypeScriptExt>ts).normalizePath(data.path);
--				const newContents = newContentsByFileName.get(tsNormalPath);
+-				const newContents = (await newContentsByFileName).get(tsNormalPath);
 -				if (newContents !== undefined) {
 -					data.contents = Buffer.from(newContents.out);
 -					data.sourceMap = newContents.sourceMap && JSON.parse(newContents.sourceMap);
 -				}
 -				this.push(data);
--			}, function end() {
--				this.push(null);
+-			}, async function end() {
 -				// free resources
--				newContentsByFileName.clear();
+-				(await newContentsByFileName).clear();
+-
+-				this.push(null);
 -				(<any>ts2tsMangler) = undefined;
 -			});
 -		}
@@ -67,3 +68,4 @@ index d5cd196..afe16d3 100644
  		return srcPipe
 -			.pipe(mangleStream)
  			.pipe(generator.stream)
+
