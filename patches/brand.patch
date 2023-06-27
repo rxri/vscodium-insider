@@ -484,8 +484,8 @@ index 840f47e..3b35ddc 100644
 +++ b/src/vs/platform/extensionManagement/node/extensionManagementService.ts
 @@ -151,3 +151,3 @@ export class ExtensionManagementService extends AbstractExtensionManagementServi
  			if (manifest.engines && manifest.engines.vscode && !isEngineValid(manifest.engines.vscode, this.productService.version, this.productService.date)) {
--				throw new Error(nls.localize('incompatible', "Unable to install extension '{0}' as it is not compatible with VS Code '{1}'.", getGalleryExtensionId(manifest.publisher, manifest.name), this.productService.version));
-+				throw new Error(nls.localize('incompatible', "Unable to install extension '{0}' as it is not compatible with VSCodium '{1}'.", getGalleryExtensionId(manifest.publisher, manifest.name), this.productService.version));
+-				throw new Error(nls.localize('incompatible', "Unable to install extension '{0}' as it is not compatible with VS Code '{1}'.", extensionId, this.productService.version));
++				throw new Error(nls.localize('incompatible', "Unable to install extension '{0}' as it is not compatible with VSCodium '{1}'.", extensionId, this.productService.version));
  			}
 @@ -213,3 +213,3 @@ export class ExtensionManagementService extends AbstractExtensionManagementServi
  		} catch (e) {
