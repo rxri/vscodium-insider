@@ -17,7 +17,7 @@ sum_file() {
 
 mkdir -p assets
 
-#if [[ "${OS_NAME}" == "osx" ]]; then
+if [[ "${OS_NAME}" == "osx" ]]; then
 #  if [[ "${CI_BUILD}" != "no" ]]; then
 #    cd "VSCode-darwin-${VSCODE_ARCH}"
 #
