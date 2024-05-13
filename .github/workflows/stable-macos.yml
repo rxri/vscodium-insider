@@ -58,6 +58,9 @@ jobs:
           python-version: '3.11'
         if: env.VSCODE_ARCH == 'x64'
 
+      - name: Install setuptools
+        run: pip install setuptools
+
       - name: Clone VSCode repo
         env:
           PULL_REQUEST_ID: ${{ github.event.inputs.checkout_pr }}
