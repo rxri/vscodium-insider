@@ -59,7 +59,7 @@ mkdir -p assets
   if [[ "${SHOULD_BUILD_DMG}" != "no" ]]; then
     echo "Building and moving DMG"
     pushd "VSCode-darwin-${VSCODE_ARCH}"
-    npx create-dmg ./*.app ..
+    npx create-dmg ./*.app .. || true
     mv ../*.dmg "../assets/${APP_NAME}.${VSCODE_ARCH}.${RELEASE_VERSION}.dmg"
     popd
   fi
