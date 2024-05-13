@@ -59,7 +59,7 @@ jobs:
         if: env.VSCODE_ARCH == 'x64'
 
       - name: Install setuptools
-        run: python3 -m pip install setuptools
+        run: brew install python-setuptools
 
       - name: Clone VSCode repo
         env:
